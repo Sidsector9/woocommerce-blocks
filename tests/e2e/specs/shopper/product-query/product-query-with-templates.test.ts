@@ -129,7 +129,7 @@ describe( `${ block.name } Block`, () => {
 	describe( 'with Products Search Results Template', () => {
 		beforeAll( async () => {
 			const productSearchResults =
-				'woocommerce/woocommerce/product-search-results';
+				'woocommerce/woocommerce//product-search-results';
 			await goToTemplateEditor( {
 				postId: productSearchResults,
 			} );
