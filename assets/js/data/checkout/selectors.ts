@@ -44,4 +44,8 @@ export const isCalculating = ( state: CheckoutState ) => {
 	return state.calculatingCount > 0;
 };
 
+export const useShippingAsBilling = ( state: CheckoutState ) => {
+	return state.useShippingAsBilling;
+};
+
 export const getCheckoutState = ( state: CheckoutState ) => state;

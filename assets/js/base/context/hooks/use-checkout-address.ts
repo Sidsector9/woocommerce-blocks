@@ -39,9 +39,10 @@ interface CheckoutAddress {
  */
 export const useCheckoutAddress = (): CheckoutAddress => {
 	const { needsShipping } = useShippingData();
-	const { useShippingAsBilling } = useSelect( ( select ) =>
-		select( CHECKOUT_STORE_KEY ).getCheckoutState()
-	);
+	const useShippingAsBilling = useSelect( ( select ) => {
+		const store = select( CHECKOUT_STORE_KEY );
+		return store.useShippingAsBilling();
+	} );
 	const { __internalSetUseShippingAsBilling } =
 		useDispatch( CHECKOUT_STORE_KEY );
 	const {
