@@ -21,7 +21,7 @@ class ProductAttributeTemplate {
 	 * Initialization method.
 	 */
 	protected function init() {
-		add_filter( 'taxonomy_template_hierarchy', array( $this, 'update_taxonomy_template_hierarchy' ), 10, 3 );
+		add_filter( 'taxonomy_template_hierarchy', array( $this, 'update_taxonomy_template_hierarchy' ), 0, 3 );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class ProductAttributeTemplate {
 		if ( taxonomy_is_product_attribute( $queried_object->taxonomy ) && wc_current_theme_is_fse_theme() ) {
 			array_splice( $templates, count( $templates ) - 1, 0, self::SLUG );
 		}
-
+//$templates[] = 'archive-product';
 		return $templates;
 	}
 }

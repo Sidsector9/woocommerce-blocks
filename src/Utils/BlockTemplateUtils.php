@@ -468,6 +468,39 @@ class BlockTemplateUtils {
 			&& self::theme_has_template( 'archive-product' );
 	}
 
+	public static function eligible_for_product_archive_fallback( $template_slug ) {
+		$eligible_for_fallbacks = array( 'taxonomy-product_cat', 'taxonomy-product_tag', ProductAttributeTemplate::SLUG );
+
+		return in_array( $template_slug, $eligible_for_fallbacks, true );
+	}
+
+	private static function exists_custom_template( $template_files, $template_slug ) {
+		foreach ($template_files as $template_file) {
+			if ( $template_file->source === 'custom' && $template_file->slug === $template_slug ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static function template_is_eligible_for_product_archive_fallback_from_db( $template_files, $template_slug ) {
+		$is_eligible_for_product_archive_fallback = self::eligible_for_product_archive_fallback($template_slug);
+		if ( ! $is_eligible_for_product_archive_fallback ) {
+			return false;
+		}
+
+		if ( self::exists_custom_template($template_files, $template_slug) ) {
+			return false;
+		};
+
+		if ( self::exists_custom_template($template_files, 'archive-product') ) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Sets the `has_theme_file` to `true` for templates with fallbacks
 	 *

@@ -63,12 +63,36 @@ class BlockTemplatesController {
 	protected function init() {
 		add_action( 'template_redirect', array( $this, 'render_block_template' ) );
 		add_filter( 'pre_get_block_file_template', array( $this, 'get_block_file_template' ), 10, 3 );
+
 		add_filter( 'get_block_templates', array( $this, 'add_block_templates' ), 10, 3 );
 		add_filter( 'current_theme_supports-block-templates', array( $this, 'remove_block_template_support_for_shop_page' ) );
+
+		add_filter( 'taxonomy_template_hierarchy', array( $this, 'add_archive_product_to_template_hierarchy' ), 10, 1 );
 
 		if ( $this->package->is_experimental_build() ) {
 			add_action( 'after_switch_theme', array( $this, 'check_should_use_blockified_product_grid_templates' ), 10, 2 );
 		}
+	}
+
+	public function add_archive_product_to_template_hierarchy( $template_hierarchy ) {
+		$slugs = array_map(
+			'_strip_template_file_suffix',
+			$template_hierarchy
+		);
+
+		if (
+			count(
+				array_filter(
+					$slugs,
+					array( BlockTemplateUtils::class, 'eligible_for_product_archive_fallback' )
+				)
+			) > 0 ) {
+			$template_hierarchy[] = 'archive-product.php';
+		}
+
+//		echo'<pre>';
+//		var_dump($template_hierarchy);
+		return $template_hierarchy;
 	}
 
 	/**
@@ -103,6 +127,8 @@ class BlockTemplatesController {
 	 * @return mixed|\WP_Block_Template|\WP_Error
 	 */
 	public function get_block_file_template( $template, $id, $template_type ) {
+//		var_dump("rincon:",$id);die;
+//		return $template;
 		$template_name_parts = explode( '//', $id );
 
 		if ( count( $template_name_parts ) < 2 ) {
@@ -164,6 +190,17 @@ class BlockTemplatesController {
 	 * @return array
 	 */
 	public function add_block_templates( $query_result, $query, $template_type ) {
+		if ($template_type!=='wp_template_part') {
+//			echo'<pre>----------------------------------</br>';
+//			var_dump( "Q?" );
+//			var_dump( $query );
+//			var_dump( "Qr1" );
+//			var_dump( $query_result );
+		}
+//		echo '<pre>';
+//		var_dump("ttype:",$template_type);
+//		var_dump("query:",$query);
+//		var_dump("query_result:",$query_result);
 		if ( ! BlockTemplateUtils::supports_block_templates() ) {
 			return $query_result;
 		}
@@ -171,9 +208,18 @@ class BlockTemplatesController {
 		$post_type      = isset( $query['post_type'] ) ? $query['post_type'] : '';
 		$slugs          = isset( $query['slug__in'] ) ? $query['slug__in'] : array();
 		$template_files = $this->get_block_templates( $slugs, $template_type );
-
+		if ($template_type!=='wp_template_part') {
+//			echo '<pre style="color:red">';
+//			var_dump($template_files);
+//			echo '</pre>';
+		}
 		// @todo: Add apply_filters to _gutenberg_get_template_files() in Gutenberg to prevent duplication of logic.
 		foreach ( $template_files as $template_file ) {
+
+			if ( BlockTemplateUtils::template_is_eligible_for_product_archive_fallback_from_db($template_files, $template_file->slug ) ) {
+//				var_dump("fallback=".$template_file->slug);
+				continue;
+			}
 
 			// If we have a template which is eligible for a fallback, we need to explicitly tell Gutenberg that
 			// it has a theme file (because it is using the fallback template file). And then `continue` to avoid
@@ -196,6 +242,7 @@ class BlockTemplatesController {
 			// the filesystem.
 			if ( 'custom' !== $template_file->source ) {
 				$template = BlockTemplateUtils::build_template_result_from_file( $template_file, $template_type );
+//				echo'<pre>';var_dump("yes", $template_file, $template_type);
 			} else {
 				$template_file->title       = BlockTemplateUtils::get_block_template_title( $template_file->slug );
 				$template_file->description = BlockTemplateUtils::get_block_template_description( $template_file->slug );
@@ -242,7 +289,7 @@ class BlockTemplatesController {
 			},
 			$query_result
 		);
-
+//		if ($template_type!=='wp_template_part'){var_dump("Qr2");var_dump($query_result);}
 		return $query_result;
 	}
 
