@@ -7,7 +7,7 @@
  */
 ?>
 
-<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"32px","right":"48px","bottom":"32px","left":"48px"},"blockGap":"40px"}}} -->
+<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"32px","right":"48px","bottom":"32px","left":"48px"},"blockGap":"24px"}}} -->
 <div class="wp-block-group alignfull" style="padding-top:32px;padding-right:48px;padding-bottom:32px;padding-left:48px">
 <!-- wp:columns --><div class="wp-block-columns">
 	<!-- wp:column {"width":"20%"} --><div class="wp-block-column" style="flex-basis:20%">
@@ -34,14 +34,6 @@
 		<!-- /wp:woocommerce/filter-wrapper --></div>
 	<!-- /wp:column -->
 
-
-
-	<!-- wp:column {"width":"20%"} --><div class="wp-block-column" style="flex-basis:20%">
-		</div>
-	<!-- /wp:column -->
-
-
-
 	<!-- wp:column {"width":"20%"} --><div class="wp-block-column" style="flex-basis:20%">
 		<!-- wp:woocommerce/filter-wrapper {"filterType":"rating-filter"} -->
 		<div class="wp-block-woocommerce-filter-wrapper"><!-- wp:heading {"level":3} -->
@@ -53,8 +45,6 @@
 		<!-- /wp:woocommerce/rating-filter --></div>
 		<!-- /wp:woocommerce/filter-wrapper --></div>
 	<!-- /wp:column -->
-
-
 
 	<!-- wp:column {"width":"20%"} --><div class="wp-block-column" style="flex-basis:20%">
 		<!-- wp:woocommerce/filter-wrapper {"filterType":"stock-filter"} -->
@@ -78,8 +68,8 @@
 	<h3><?php esc_html_e( 'Active filters', 'woo-gutenberg-products-block' ); ?></h3>
 	<!-- /wp:heading -->
 
-	<!-- wp:woocommerce/active-filters {"heading":"","lock":{"remove":true}} -->
-	<div class="wp-block-woocommerce-active-filters is-loading" data-display-style="list" data-heading="" data-heading-level="3"><span aria-hidden="true" class="wc-block-active-product-filters__placeholder"></span></div>
+	<!-- wp:woocommerce/active-filters {"heading":"","lock":{"remove":true},"displayStyle":"chips"} -->
+	<div class="wp-block-woocommerce-active-filters is-loading" data-display-style="chips" data-heading="" data-heading-level="3"><span aria-hidden="true" class="wc-block-active-product-filters__placeholder"></span></div>
 	<!-- /wp:woocommerce/active-filters --></div>
 	<!-- /wp:woocommerce/filter-wrapper -->
 </div>
