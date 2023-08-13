@@ -199,7 +199,7 @@ The checkout block currently has legacy handling for payment processing. It conv
 
 Implementing the correct loading of your client side asset registration is tricky for the blocks integration. This is because there are some dependencies on the _loading order_ of dependent assets in the request. To remove the complexity of this for extension consumers here, the server side API interface helps with ensuring you can register any assets and data to pass along to your client side payment method from the server and handles the correct loading order of those assets.
 
-First, you create a class that extends `Automattic\WooCommerce\Blocks\Payments\Integration\AbstractPaymentMethodType` (or you can implement the `Automattic\WooCommerce\Blocks\Payments\PaymentMethodTypeInterface`, but you get some functionality for free via the abstract class).
+First, you create a class that extends `Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType` (or you can implement the `Automattic\WooCommerce\Blocks\Payments\PaymentMethodTypeInterface`, but you get some functionality for free via the abstract class).
 
 In your class:
 
